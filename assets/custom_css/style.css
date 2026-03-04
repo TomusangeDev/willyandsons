@@ -1,0 +1,62 @@
+.mobile-header, .desktop-header, #mobileNavBar {
+    /*background: #f2f2f2;*/
+    /*background: #d8d8d8;*/
+    /*background: #cbcbcb;*/
+    background: #e5e5e5;
+    /*background: lightblue;*/
+    z-index: 999;
+}
+
+/*nobile navigation bar*/
+    #mobileToggle {
+        background: transparent;
+        border: none;
+    }
+    #mobileNavBar {
+        margin-left: -500px;
+        position: fixed;
+        margin-top: 75px;
+        overflow-y: auto !important;
+        transition: 0.4s;
+    }
+    #mobileNavBar.open-nav {
+        margin-left: 0 !important;
+    }
+
+.active-item {
+    background: #cbcbcb;
+}
+.mobile-navigation ul li a:hover {
+    background: #cbcbcb;
+}
+
+/*prodicts*/
+.product-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+/*.show-product-menu-items {
+    max-height: 500px ;
+}*/
+
+/*business hub*/
+.business-hub-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+@media (min-width: 990px) {
+    .mobile-header {
+        display: none !important;
+        opacity: 0 !important;
+    }
+    .desktop-header {
+        opacity: 1 !important;
+    }
+}
+@media (max-width: 990px) {
+    .desktop-header {
+        opacity: 0 !important;
+    }
+}
