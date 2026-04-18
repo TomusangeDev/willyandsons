@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Willy and Sons</title>
+    <link href="/onlineshop/bootstrap/bootstrap_css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/onlineshop/icons/bootstrapicons/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .login-card {
+            max-width: 420px;
+            margin: auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-header i {
+            font-size: 60px;
+            color: #667eea;
+        }
+        .login-header h2 {
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+        .form-control {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-login {
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            width: 100%;
+            color: white;
+            transition: 0.4s;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            /* box-shadow: 0 5px 15px rgb(14, 44, 177); */
+        }
+        .alert {
+            border-radius: 10px;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body class="bg-primary">
+    <div class="login-card">
+        <div class="login-header">
+            <i class="bi bi-shield-lock-fill"></i>
+            <h2>Admin Login</h2>
+            <p>Enter your credentials to access the admin panel</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input type="email" class="form-control" id="email" placeholder="admin@example.com" required>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                    <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                        <i class="bi bi-eye-slash"></i>
+                    </span>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-login bg-primary" id="loginBtn">
+                <i class="bi bi-box-arrow-in-right"></i> Login as Admin
+            </button>
+        </form>
+        
+        <div id="message" class="mt-3"></div>
+        
+        <div class="back-link">
+            <a href="/onlineshop/index.html">
+                <i class="bi bi-arrow-left"></i> Back to Store
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+        
+        togglePassword.addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
+        });
+        
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const messageDiv = document.getElementById('message');
+            
+            // Clear previous message
+            messageDiv.innerHTML = '';
+            
+            // Disable button and show loading
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Logging in...';
+            
+            try {
+                const response = await fetch('/onlineshop/administrator/admin-login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    messageDiv.innerHTML = '<div class="alert alert-success">✅ Login successful! Redirecting...</div>';
+                    setTimeout(() => {
+                        window.location.href = '/onlineshop/administrator/admin-add-product.html';
+                    }, 1000);
+                } else {
+                    messageDiv.innerHTML = '<div class="alert alert-danger">❌ ' + data.error + '</div>';
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Login as Admin';
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<div class="alert alert-danger">❌ Network error. Please try again.</div>';
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Login as Admin';
+            }
+        });
+    </script>
+</body>
+</html>
