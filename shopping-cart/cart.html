@@ -1,0 +1,363 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Willy and Sons Uganda based online store dealing in a variety of products">
+  <meta name="keywords" content="Willy and Sons Ugandan online store, Shop anywhere in Uganda, Products for delivery in Uganda, Buy products online in Uganda">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Willy">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="/onlineshop/willysonsicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/navbar-css/navbar.css">
+  <link rel="stylesheet" href="/onlineshop/icons/bootstrapicons/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/onlineshop/bootstrap/bootstrap_css/bootstrap.min.css">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/main-body-css/main-body.css">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/footer-css/footer-css.css">
+  <link rel="stylesheet" href="/onlineshop/js/swiperjs/swiper-bundle.min.css">
+  <link rel="stylesheet" href="/onlineshop/aos/aos_css/aos.css">
+  <title>Willy and Sons Official Online Store</title>
+<style>
+#auth-section {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 0;
+    width: 200px;
+    min-width: 120px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+#auth-section a {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #333;
+    font-size: 20px;
+}
+#auth-section a:hover {
+    background-color: #f5f5f5;
+}
+#auth-section.show {
+    display: block !important;
+}
+</style>
+    <script>
+      document.addEventListener('click', (e) => {
+        const userIcon = e.target.closest('#user-icon');
+        const authSection = document.getElementById('auth-section');
+        if (userIcon) {
+          authSection.classList.toggle('show')
+          return;
+        }
+        if (e.target.closest('#auth-section')) { return; }
+        authSection.classList.remove('show');
+      });
+</script>
+</head>
+<body class="bg-light">
+  <nav id="navigationBar" class="container-fluid fixed-top shadow-sm" style="background: #ffffff; border-bottom: 1px solid #cfcece !important;"></nav>
+    
+  <div class="container pt-3" style="margin-top: 85px;">
+    <h3 class="mb-4">My Shopping Cart</h3>
+    <div id="cart-items"></div>
+
+    <div class="mt-4 text-end">
+      <h5 class="bg-white p-3 rounded shadow-sm">
+        Total: <sup>UGX</sup> <span id="cart-total" class="fw-bold text-success">0</span>
+      </h5>
+      <button id="checkout-btn" class="btn btn-success btn-lg px-5">Proceed to Checkout</button>
+    </div>
+  </div>
+
+
+    <footer id="index-footer" class="container pb-5"></footer>
+
+    <script type="module">
+    import { updateCartCount } from '/onlineshop/shopping-cart/cart-functionality/cart_core.js';
+    
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    
+    
+    async function fetchCartFromDatabase() {
+        try {
+            const response = await fetch('/onlineshop/api/get_cart.php');
+            const data = await response.json();
+            console.log('Database cart response:', data);
+            
+            if (data.error) return [];
+            
+            return data.map(item => ({
+                id: parseInt(item.product_id),
+                name: item.name,
+                price: parseFloat(item.price),
+                image: item.image,
+                qty: parseInt(item.quantity)
+            }));
+        } catch (error) {
+            console.error('Failed to fetch cart:', error);
+            return [];
+        }
+    }
+    
+    async function updateQuantityInDatabase(productId, change) {
+        try {
+            const numericChange = parseInt(change);
+            
+            const response = await fetch('/onlineshop/api/update_cart_quantity.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    product_id: parseInt(productId), 
+                    change: numericChange 
+                })
+            });
+            const result = await response.json();
+            console.log('Update result:', result);
+            return result;
+        } catch (error) {
+            console.error('Failed to update quantity:', error);
+            return { success: false };
+        }
+    }
+    
+    async function removeFromDatabase(productId) {
+        try {
+            const response = await fetch('/onlineshop/api/remove_from_cart.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ product_id: parseInt(productId) })
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to remove item:', error);
+            return { success: false };
+        }
+    }
+    
+    
+    async function getCurrentCart() {
+        if (isLoggedIn) {
+            const dbCart = await fetchCartFromDatabase();
+            console.log('Cart for logged-in user:', dbCart);
+            return dbCart;
+        } else {
+            const localCart = JSON.parse(localStorage.getItem('cart') || '[]');
+            console.log('Cart for guest user:', localCart);
+            return localCart;
+        }
+    }
+    
+    
+    async function updateQuantity(productId, change) {
+        console.log(`Updating product ${productId} by ${change}`);
+        
+        if (isLoggedIn) {
+            const result = await updateQuantityInDatabase(productId, change);
+            if (result.success) {
+                await renderCart();
+                await updateCartCount();
+            }
+        } else {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const itemIndex = cart.findIndex(item => item.id == productId);
+            if (itemIndex !== -1) {
+                let newQty = Number(cart[itemIndex].qty) + Number(change);
+                if (newQty < 1) newQty = 1;
+                if (newQty > 50) newQty = 50;
+                cart[itemIndex].qty = newQty;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                await renderCart();
+                await updateCartCount();
+            }
+        }
+    }
+    
+    
+    async function removeItem(productId) {
+        console.log(`Removing product ${productId}`);
+        
+        if (isLoggedIn) {
+            const result = await removeFromDatabase(productId);
+            if (result.success) {
+                await renderCart();
+                await updateCartCount();
+            }
+        } else {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart = cart.filter(item => item.id != productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            await renderCart();
+            await updateCartCount();
+        }
+    }
+    
+    
+    async function renderCart() {
+        const cart = await getCurrentCart();
+        const container = document.getElementById('cart-items');
+        
+        console.log('Rendering cart with items:', cart);
+        
+        if (!container) return;
+        
+        if (!cart || cart.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-5 bg-white rounded shadow-sm">
+                    <i class="bi bi-cart-x" style="font-size: 64px; color: #ccc;"></i>
+                    <h4 class="mt-3 text-muted">Your cart is empty!</h4>
+                    <a href="/onlineshop/index.html" class="btn btn-primary mt-3">Continue Shopping</a>
+                </div>
+            `;
+            const totalEl = document.getElementById('cart-total');
+            if (totalEl) totalEl.textContent = '0';
+            return;
+        }
+        
+        let totalPrice = 0;
+        container.innerHTML = '';
+        
+        for (const item of cart) {
+            const qty = Number(item.qty);
+            const price = Number(item.price);
+            const itemTotal = price * qty;
+            totalPrice += itemTotal;
+            
+            const div = document.createElement('div');
+            div.className = 'cart-item d-flex align-items-center mb-3 p-3 border bg-white rounded shadow-sm';
+            div.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px;">
+                <div class="flex-grow-1 ms-3">
+                    <strong class="fs-5">${escapeHtml(item.name)}</strong><br>
+                    <div class="mt-2">
+                        <span class="text-primary fw-bold">UGX ${price.toLocaleString()}</span>
+                        <span class="mx-2">x</span>
+                        <span class="fw-bold qty-display" data-id="${item.id}">${qty}</span>
+                        <span class="mx-2">=</span>
+                        <span class="text-success fw-bold">UGX ${itemTotal.toLocaleString()}</span>
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-secondary decrease-qty" data-id="${item.id}">−</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-1 increase-qty" data-id="${item.id}">+</button>
+                        <button class="btn btn-sm btn-outline-danger ms-2 remove-item" data-id="${item.id}">
+                            <i class="bi bi-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+        
+        const totalElement = document.getElementById('cart-total');
+        if (totalElement) totalElement.textContent = totalPrice.toLocaleString();
+        
+        attachCartEvents();
+    }
+    
+    
+    function attachCartEvents() {
+        document.querySelectorAll('.decrease-qty').forEach(btn => {
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            newBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const id = newBtn.dataset.id;
+                await updateQuantity(id, -1);
+            });
+        });
+        
+        document.querySelectorAll('.increase-qty').forEach(btn => {
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            newBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const id = newBtn.dataset.id;
+                await updateQuantity(id, 1);
+            });
+        });
+        
+        document.querySelectorAll('.remove-item').forEach(btn => {
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            newBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const id = newBtn.dataset.id;
+                await removeItem(id);
+            });
+        });
+    }
+    
+    
+    async function setupCheckoutButton() {
+        const checkoutBtn = document.getElementById('checkout-btn');
+        if (!checkoutBtn) return;
+        
+        const newCheckoutBtn = checkoutBtn.cloneNode(true);
+        checkoutBtn.parentNode.replaceChild(newCheckoutBtn, checkoutBtn);
+        
+        newCheckoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            const cart = await getCurrentCart();
+            
+            if (!cart || cart.length === 0) {
+                alert('Your cart is empty! Please add items before checking out.');
+                return;
+            }
+            
+            const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            if (loggedIn) {
+                window.location.href = '/onlineshop/shopping-cart/checkout.html';
+            } else {
+                const goToLogin = confirm('You need to login to checkout. Click OK to login.');
+                if (goToLogin) {
+                    localStorage.setItem('redirectAfterLogin', '/onlineshop/shopping-cart/checkout.html');
+                    window.location.href = '/onlineshop/users/login.html';
+                }
+            }
+        });
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    
+    async function init() {
+        console.log('Cart page initializing. Logged in:', isLoggedIn);
+        await renderCart();
+        await updateCartCount();
+        await setupCheckoutButton();
+    }
+    
+    init();
+</script>
+
+  <script type="module" src="/onlineshop/import-products.js"></script>
+  <script src="/onlineshop/js/custom-js/navbar-js/fetch-navbar.js"></script>
+  <script src="/onlineshop/js/custom-js/footer-js/fetch-footer.js"></script>
+  <script src="/onlineshop/js/swiperjs/swiper-bundle.min.js"></script>
+  <script src="/onlineshop/js/custom-js/load-swiperjs/load-swiper.js"></script>
+  <script src="/onlineshop/js/custom-js/email-subscription/fetch-email-subscription.js"></script>
+  <script src="/onlineshop/js/custom-js/partners-js/fetch-partners.js"></script>
+  <script src="/onlineshop/aos/aos_js/aos.js"></script>
+    <script>
+  AOS.init();
+  </script>
+</body>
+</html>
