@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Willy and Sons Uganda based online store dealing in a variety of products">
+  <meta name="keywords" content="Willy and Sons Ugandan online store, Shop anywhere in Uganda, Products for delivery in Uganda, Buy products online in Uganda">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Willy">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="/onlineshop/willysonsicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/navbar-css/navbar.css">
+  <link rel="stylesheet" href="/onlineshop/icons/bootstrapicons/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/onlineshop/bootstrap/bootstrap_css/bootstrap.min.css">
+   <link rel="stylesheet" href="/onlineshop/users/login.css">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/footer-css/footer-css.css">
+  <link rel="stylesheet" href="/onlineshop/js/swiperjs/swiper-bundle.min.css">
+  <link rel="stylesheet" href="/onlineshop/aos/aos_css/aos.css">
+  <title>Willy and Sons Official Online Store</title>
+        <style>
+#auth-section {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 0;
+    min-width: 120px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+#auth-section a {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+#auth-section a:hover {
+    background-color: #f5f5f5;
+}
+#auth-section.show {
+    display: block !important;
+}
+    </style>
+    <script>
+      document.addEventListener('click', (e) => {
+        const userIcon = e.target.closest('#user-icon');
+        const authSection = document.getElementById('auth-section');
+        if (userIcon) {
+          authSection.classList.toggle('show')
+          return;
+        }
+        if (e.target.closest('#auth-section')) { return; }
+        authSection.classList.remove('show');
+      });
+</script>
+</head>
+<body class="bg-light">
+          <nav id="navigationBar" class="container-fluid fixed-top shadow-sm" style="background: #ffffff; border-bottom: 1px solid #cfcece !important;"></nav>
+  <!-- <script type="module" src="/onlineshop/js/import-shared-components/import-all-shared-components.js"></script> -->
+  <!-- <div style="height: 85px;"></div> -->
+    <div class="login-container" style="margin-top: 85px;">
+        <div class="login-card" data-aos="fade-up" data-aos-duration="1000">
+            <div class="card-header bg-primary">
+                <h2>Welcome Back</h2>
+                <p>Login to your account</p>
+            </div>
+            <div class="card-body">
+                <div id="errorMessage" class="error-message">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <span id="errorText"></span>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                            <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                                <i class="bi bi-eye-slash"></i>
+                            </span>
+                        </div>
+                        <div class="forgot-password">
+                            <a href="#" class="text-primary">Forgot password?</a>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-login bg-primary" id="loginBtn">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </button>
+                    
+                    <div class="register-link">
+                        Don't have an account? <a href="/onlineshop/users/register.html">Create one</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+          <!-- footer -->
+  <footer id="index-footer" class="container pb-5 mt-5"></footer>
+  
+
+ <script type="module" src="/onlineshop/import-products.js"></script>
+  <script src="/onlineshop/js/custom-js/navbar-js/fetch-navbar.js"></script>
+  <script src="/onlineshop/js/custom-js/footer-js/fetch-footer.js"></script>
+  <script src="/onlineshop/js/swiperjs/swiper-bundle.min.js"></script>
+  <script src="/onlineshop/aos/aos_js/aos.js"></script>
+  <script>
+    AOS.init();
+    
+    const form = document.getElementById('loginForm');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    
+    const togglePassword = document.getElementById('togglePassword');
+    togglePassword.addEventListener('click', () => {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        togglePassword.querySelector('i').classList.toggle('bi-eye');
+        togglePassword.querySelector('i').classList.toggle('bi-eye-slash');
+    });
+    
+    function getGuestCart() {
+        const cart = localStorage.getItem('cart');
+        if (!cart) return [];
+        try {
+            return JSON.parse(cart);
+        } catch (e) {
+            return [];
+        }
+    }
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        errorMessage.style.display = 'none';
+        
+        if (!email.value || !password.value) {
+            errorText.textContent = 'Please enter both email and password';
+            errorMessage.style.display = 'flex';
+            return;
+        }
+        
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Logging in...';
+        
+        const guestCart = getGuestCart();
+        
+        try {
+            const response = await fetch('/onlineshop/api/login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email.value,
+                    password: password.value,
+                    guestCart: guestCart  
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Store user info in localStorage
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('isLoggedIn', 'true');
+
+                console.log('User saved:', data.user);
+                
+                // If server returned merged cart, update localStorage
+                if (data.mergedCart && data.mergedCart.length > 0) {
+                    // Convert database cart format to localStorage format
+                    const localCart = data.mergedCart.map(item => ({
+                        id: item.product_id,
+                        name: item.name,
+                        price: parseFloat(item.price),
+                        image: item.image,
+                        qty: item.quantity
+                    }));
+                    localStorage.setItem('cart', JSON.stringify(localCart));
+                }
+                
+                // Redirect to cart page
+                window.location.href = '/onlineshop/shopping-cart/cart.html';
+            } else {
+                errorText.textContent = data.error || 'Login failed. Please try again.';
+                errorMessage.style.display = 'flex';
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Login';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            errorText.textContent = 'Network error. Please try again.';
+            errorMessage.style.display = 'flex';
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Login';
+        }
+    });
+</script>
+</body>
+</html>
