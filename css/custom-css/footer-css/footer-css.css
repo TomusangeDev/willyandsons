@@ -1,0 +1,7 @@
+.popular-button {
+    background-color: #dae6eb !important;
+    font-size: 16px !important;
+}
+.popular-button:hover {
+    background-color: #769abd !important;
+}
