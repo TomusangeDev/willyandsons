@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Willy and Sons Uganda based online store dealing in a variety of products">
+  <meta name="keywords" content="Willy and Sons Ugandan online store, Shop anywhere in Uganda, Products for delivery in Uganda, Buy products online in Uganda">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Willy">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="/onlineshop/willysonsicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/navbar-css/navbar.css">
+  <link rel="stylesheet" href="/onlineshop/icons/bootstrapicons/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/onlineshop/bootstrap/bootstrap_css/bootstrap.min.css">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/main-body-css/main-body.css">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/footer-css/footer-css.css">
+  <link rel="stylesheet" href="/onlineshop/js/swiperjs/swiper-bundle.min.css">
+  <link rel="stylesheet" href="/onlineshop/aos/aos_css/aos.css">
+  <title>Willy and Sons Official Online Store</title>
+    <style>
+        #auth-section {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px 0;
+            width: 200px;
+            min-width: 120px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 1000;
+        }
+        #auth-section a {
+           display: block;
+           padding: 8px 16px;
+           text-decoration: none;
+           color: #333;
+           font-size: 20px;
+        }
+        #user-view span {
+           padding: 8px 16px;
+           font-size: 14px;
+        }
+        #auth-section a:hover {
+           background-color: #f5f5f5;
+        }
+        #auth-section.show {
+          display: block !important;
+        }
+    </style>
+    <script>
+      document.addEventListener('click', (e) => {
+        const userIcon = e.target.closest('#user-icon');
+        const authSection = document.getElementById('auth-section');
+        if (userIcon) {
+          authSection.classList.toggle('show')
+          return;
+        }
+        if (e.target.closest('#auth-section')) { return; }
+        authSection.classList.remove('show');
+      });
+    </script>
+</head>
+<body class="bg-light">
+    <style>
+        .product-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .quantity-number {
+            font-size: 20px;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: center;
+        }
+        .product-price {
+            font-size: 28px;
+            color: #e67e22;
+            font-weight: bold;
+        }
+        .product-category {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav id="navigationBar" class="container-fluid fixed-top shadow-sm" style="background: #ffffff;"></nav>
+    
+    <div class="container" style="margin-top: 100px;">
+        <div id="product-container" class="row">
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading product details...</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer id="index-footer" class="container pb-5 mt-5"></footer>
+
+    <script type="module" src="/onlineshop/import-products.js"></script>
+    <script src="/onlineshop/js/custom-js/navbar-js/fetch-navbar.js"></script>
+    <script src="/onlineshop/js/custom-js/footer-js/fetch-footer.js"></script>
+    <script src="/onlineshop/js/swiperjs/swiper-bundle.min.js"></script>
+    <script src="/onlineshop/js/custom-js/load-swiperjs/load-swiper.js"></script>
+    <script src="/onlineshop/js/custom-js/email-subscription/fetch-email-subscription.js"></script>
+    <script src="/onlineshop/js/custom-js/partners-js/fetch-partners.js"></script>
+    <script src="/onlineshop/aos/aos_js/aos.js"></script>
+    <script type="module">
+    import { getProductById } from '/onlineshop/products_data.js';
+    import { addToCart, removeFromCart, getCart, updateCartCount } from '/onlineshop/shopping-cart/cart-functionality/cart_core.js';
+    
+    // Get product id from url
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    
+    let currentProduct = null;
+    let currentQty = 1;
+    const MAX_QTY = 50;
+    
+    async function loadProduct() {
+        if (!productId) {
+            showError('No product ID specified');
+            return;
+        }
+        
+        const product = await getProductById(productId);
+        
+        if (product.error) {
+            showError(product.error);
+            return;
+        }
+        
+        currentProduct = product;
+        await renderProductView();
+    }
+    
+    function showError(message) {
+        const container = document.getElementById('product-container');
+        container.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-danger text-center py-5">
+                    <i class="bi bi-exclamation-triangle-fill" style="font-size: 48px;"></i>
+                    <h3 class="mt-3">${message}</h3>
+                    <a href="/onlineshop/index.html" class="btn btn-primary mt-3">Back to Home</a>
+                </div>
+            </div>
+        `;
+    }
+    
+    async function renderProductView() {
+        const cart = await getCart();
+        const inCart = cart.some(item => item.id == currentProduct.id);
+        const existingItem = cart.find(item => item.id == currentProduct.id);
+        
+        if (existingItem) {
+            currentQty = existingItem.qty;
+        }
+        
+        const container = document.getElementById('product-container');
+        container.innerHTML = `
+            <div class="col-md-6" style="margin-top: 85px;">
+                <img src="${currentProduct.image || 'https://via.placeholder.com/500x400?text=No+Image'}" 
+                     alt="${currentProduct.name}" 
+                     class="product-image"
+                     onerror="this.src='https://via.placeholder.com/500x400?text=Image+Not+Found'">
+            </div>
+            <div class="col-md-6">
+                <div class="mb-2">
+                    <span class="product-category">${currentProduct.category || 'Uncategorized'}</span>
+                    ${currentProduct.brand ? `<span class="product-category ms-2">${currentProduct.brand}</span>` : ''}
+                </div>
+                <h1 class="mb-3">${escapeHtml(currentProduct.name)}</h1>
+                <div class="product-price mb-3">
+                    UGX ${Number(currentProduct.price).toLocaleString()}
+                    ${currentProduct.old_price ? `<span class="text-muted text-decoration-line-through ms-2 fs-6">UGX ${Number(currentProduct.old_price).toLocaleString()}</span>` : ''}
+                </div>
+                <p class="text-muted mb-4">${escapeHtml(currentProduct.description || 'No description available')}</p>
+                
+                <div class="mb-4">
+                    <label class="fw-bold mb-2">Quantity:</label>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-outline-secondary quantity-btn" id="decrease-btn">−</button>
+                        <span class="quantity-number mx-3" id="qty-display">${currentQty}</span>
+                        <button class="btn btn-outline-secondary quantity-btn" id="increase-btn">+</button>
+                    </div>
+                </div>
+                
+                <div class="mb-4 p-3 bg-white rounded shadow-sm">
+                    <h5>Total: <span class="text-success">UGX ${(currentProduct.price * currentQty).toLocaleString()}</span></h5>
+                </div>
+                
+                <button class="btn ${inCart ? 'btn-danger' : 'btn-primary'} btn-lg w-100" id="cart-btn">
+                    <i class="bi bi-cart-plus"></i> ${inCart ? 'Remove from Cart' : 'Add to Cart'}
+                </button>
+                
+                <a href="/onlineshop/index.html" class="btn btn-outline-secondary w-100 mt-3">
+                    <i class="bi bi-arrow-left"></i> Continue Shopping
+                </a>
+            </div>
+        `;
+        
+        document.getElementById('decrease-btn')?.addEventListener('click', decreaseQuantity);
+        document.getElementById('increase-btn')?.addEventListener('click', increaseQuantity);
+        document.getElementById('cart-btn')?.addEventListener('click', toggleCart);
+    }
+    
+    function decreaseQuantity() {
+        if (currentQty > 1) {
+            currentQty--;
+            updateDisplay();
+        }
+    }
+    
+    function increaseQuantity() {
+        if (currentQty < MAX_QTY) {
+            currentQty++;
+            updateDisplay();
+        } else {
+            alert(`Maximum quantity is ${MAX_QTY}`);
+        }
+    }
+    
+    function updateDisplay() {
+        document.getElementById('qty-display').textContent = currentQty;
+        const total = currentProduct.price * currentQty;
+        document.querySelector('#product-container .text-success').textContent = `UGX ${total.toLocaleString()}`;
+    }
+    
+    async function toggleCart() {
+        const cart = await getCart();
+        const inCart = cart.some(item => item.id == currentProduct.id);
+        const btn = document.getElementById('cart-btn');
+        
+        if (inCart) {
+            await removeFromCart(currentProduct.id);
+            btn.classList.remove('btn-danger');
+            btn.classList.add('btn-primary');
+            btn.innerHTML = '<i class="bi bi-cart-plus"></i> Add to Cart';
+            showNotification('Product removed from cart', 'danger');
+        } else {
+            await addToCart(currentProduct, currentQty);
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-danger');
+            btn.innerHTML = '<i class="bi bi-cart-dash"></i> Remove from Cart';
+            showNotification(`${currentProduct.name} added to cart!`, 'success');
+        }
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+    
+    async function init() {
+        await loadProduct();
+        updateCartCount();
+    }
+    
+    init();
+</script>
+</body>
+</html>

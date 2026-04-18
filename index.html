@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Willy and Sons Uganda based online store dealing in a variety of products">
+  <meta name="keywords" content="Willy and Sons Ugandan online store, Shop anywhere in Uganda, Products for delivery in Uganda, Buy products online in Uganda">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Willy">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="/onlineshop/willysonsicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/navbar-css/navbar.css">
+  <link rel="stylesheet" href="/onlineshop/icons/bootstrapicons/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/onlineshop/bootstrap/bootstrap_css/bootstrap.min.css">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/main-body-css/main-body.css">
+  <link rel="stylesheet" href="/onlineshop/css/custom-css/footer-css/footer-css.css">
+  <link rel="stylesheet" href="/onlineshop/js/swiperjs/swiper-bundle.min.css">
+  <link rel="stylesheet" href="/onlineshop/aos/aos_css/aos.css">
+  <title>Willy and Sons Official Online Store</title>
+  <style>
+    #auth-section {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 8px 0;
+      width: 200px;
+      min-width: 120px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+    #auth-section a {
+      display: block;
+      padding: 8px 16px;
+      text-decoration: none;
+      color: #333;
+      font-size: 20px;
+    }
+    #user-view span {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+    #auth-section a:hover {
+      background-color: #f5f5f5;
+    }
+    #auth-section.show {
+      display: block !important;
+    }
+  </style>
+  <script>
+      document.addEventListener('click', (e) => {
+        const userIcon = e.target.closest('#user-icon');
+        const authSection = document.getElementById('auth-section');
+        if (userIcon) {
+          authSection.classList.toggle('show')
+          return;
+        }
+        if (e.target.closest('#auth-section')) { return; }
+        authSection.classList.remove('show');
+      });
+</script>
+</head>
+<body class="bg-light">
+  <nav id="navigationBar" class="container-fluid fixed-top shadow-sm" style="background: #ffffff; border-bottom: 1px solid #cfcece !important;"></nav>
+  <!-- <script type="module" src="/onlineshop/js/import-shared-components/import-all-shared-components.js"></script> -->
+   <main class="container" style="margin-top: 85px;">
+    <!-- shop by category -->
+ <section class="py-3">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="fw-bold m-0">Shop by Category</h3>
+    </div>
+    <div class="category-wrapper">
+    <div class="swiper categorySwiper">
+      <div class="swiper-wrapper py-2">
+        <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/laptop.webp" alt="Laptops">
+            <span>Laptops</span>
+          </div>
+        
+        </a>
+        <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/phone.webp" alt="Phones">
+            <span>Phones</span>
+          </div>
+        </a>
+        <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/gaming.webp" alt="Video Gaming products">
+            <span>Gaming</span>
+          </div>
+        </a>
+        <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/television.webp" alt="Televisions">
+            <span>TV</span>
+          </div>
+        </a>
+        <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/desktop.webp" alt="Desktops">
+            <span>Desktops</span>
+          </div>
+        </a>
+                <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/printer.webp" alt="Printers">
+            <span>Printers</span>
+          </div>
+        </a>
+                <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/iot.webp" alt="Internet of Things products">
+            <span>IoT</span>
+          </div>
+        </a>
+                <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/cctv.webp" alt="CCTVs">
+            <span>CCTVs</span>
+          </div>
+        </a>
+                <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/speaker.webp" alt="audio home theatre products">
+            <span>Audio</span>
+          </div>
+        </a>
+                <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/office.webp" alt="Office products">
+            <span>Office</span>
+          </div>
+        </a>
+                <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/video.jpeg" alt="video products">
+            <span>Video</span>
+          </div>
+        </a>
+                <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/network.webp" alt="internet and networking products">
+            <span>Internet</span>
+          </div>
+        </a>
+                <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/power.webp" alt="Power products">
+            <span>Power</span>
+          </div>
+        </a>
+                <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/headset.webp" alt="Headsets and earbuds">
+            <span>Headphones</span>
+          </div>
+        </a>
+                <a href="#" class="swiper-slide swiper-category-slide d-block text-decoration-none text-dark">
+          <div class="category-mini">
+            <img src="/onlineshop/images/user-interface-images/shop_by_category/camera.webp" alt="Digital cameras">
+            <span>Cameras</span>
+          </div>
+        </a>
+
+      </div>   
+      <div class="scroll-dots text-center mt-2">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <!-- Arrows -->
+      <div class="swiper-button-prev category-prev"></div>
+      <div class="swiper-button-next category-next"></div>
+    </div>
+    </div>
+  </div>
+</section>
+<!--New products-->
+<section class="py-3">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold">New Products</h4>
+    <a href="#" class="text-decoration-none fw-bold p-2 bg-white" style="border: 2px solid #bcc6ca; border-radius: 2px;">View All <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div id="new-products-container" class="row g-3"></div>
+</section>
+<hr>
+  <!--shop by brand-->
+  <section class="brand-area py-5">
+  <div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="fw-bold">Shop by Brand</h4>
+    </div>
+    <div class="swiper brand-swiper py-2">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/acer.png" alt="acer brand">
+          </a>
+        </div>
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/amazon.png" alt="amazon brand">
+          </a>
+        </div>
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/amd.png" alt="AMD brand">
+          </a>
+        </div>
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/anker.png" alt="Anker brand">
+          </a>
+        </div>
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/apple.png" alt="Apple brand">
+          </a>
+        </div>
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/asus.png" alt="asus brand">
+          </a>
+        </div>     
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/beatselectronics.png" alt="beats elecronics brand">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/bose.png" alt="bose brand">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/corsair.png" alt="cosair brand">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/dell.png" alt="DELL brand">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/fitbit.png" alt="Fitbit brand">
+          </a>
+        </div>      
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/garmin.png" alt="Garmin brand">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/google.png" alt="google products">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/hisense.png" alt="Hisense products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/hp.png" alt="hp products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/huawei.png" alt="Huawei products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/intel.png" alt="Intel products">
+          </a>
+        </div>      
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/kingston.png" alt="Kingston products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/lenovo.png" alt="Lenovo products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/lg.png" alt="LG products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/logitech.png" alt="Logitech products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/microsoft.png" alt="Microsoft products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/nintendo.png" alt="Nintendo products">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/nvidia.png" alt="Nvidia products">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/OnePlus.png" alt="OnePlus products">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/oppo.jpeg" alt="Oppo products">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/phillips.png" alt="Phillips products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/razer.png" alt="Razer products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/samsung.png" alt="Samsung products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/Untitled.jpeg" alt="Sennheister products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/sony.png" alt="Sony products">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/tcl.png" alt="TCL products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/tplink.png" alt="TP Link products">
+          </a>
+        </div>       
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/ubl.png" alt="UBL products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/vivotwo.png" alt="Vivo products">
+          </a>
+        </div>        
+        <div class="swiper-slide brand-slide">
+          <a href="#" class="brand-box">
+            <img src="/onlineshop/images/user-interface-images/brand/xiaomi.png" alt="Xiaomi products">
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--Top Selling products-->
+<section class="py-3">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold">Top Selling Products</h4>
+    <a href="/willySonsOnlineStore/trending_products/trending_deals.html" class="text-decoration-none fw-bold p-2 bg-white" style="border: 2px solid #bcc6ca; border-radius: 2px;">View All <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div id="trending-products-container" class="row g-3"></div>
+</section>
+<!--Discounted products-->
+<section class="py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold">Discounted Products</h4>
+    <a href="/willySonsOnlineStore/discounted_products/products_on_discount.html" class="text-decoration-none fw-bold p-2 bg-white" style="border: 2px solid #bcc6ca; border-radius: 2px;">View All <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div id="discounted-products-container" class="row g-3"></div>
+</section>
+<!--Online Student products-->
+<section class="py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold">Online Student Products</h4>
+    <a href="#" class="text-decoration-none fw-bold p-2 bg-white" style="border: 2px solid #bcc6ca; border-radius: 2px;">View All <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div id="student-products-container" class="row g-3"></div>
+</section>
+<!--Office products-->
+<section class="py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold">Office Products</h4>
+    <a href="#" class="text-decoration-none fw-bold p-2 bg-white" style="border: 2px solid #bcc6ca; border-radius: 2px;">View All <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div id="office-products-container" class="row g-3"></div>
+</section>
+<!--Bsuness  products-->
+<section class="py-3 mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold">Business Products</h4>
+    <a href="#" class="text-decoration-none fw-bold p-2 bg-white" style="border: 2px solid #bcc6ca; border-radius: 2px;">View All <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div id="business-products-container" class="row g-3"></div>
+</section>
+  <!--Partners---->
+  <section id="partners" class="py-5 bg-light"></section> 
+  <!-- Email subscription form -->
+    <div id="email-subscribe" class="my-5" data-aos="fade-up"></div>
+  </main>
+  <!-- footer -->
+  <footer id="index-footer" class="container pb-5"></footer>
+
+  <script type="module" src="/onlineshop/import-products.js"></script>
+  <script src="/onlineshop/js/custom-js/navbar-js/fetch-navbar.js"></script>
+  <script src="/onlineshop/js/custom-js/footer-js/fetch-footer.js"></script>
+  <script src="/onlineshop/js/swiperjs/swiper-bundle.min.js"></script>
+  <script src="/onlineshop/js/custom-js/load-swiperjs/load-swiper.js"></script>
+  <script src="/onlineshop/js/custom-js/email-subscription/fetch-email-subscription.js"></script>
+  <script src="/onlineshop/js/custom-js/partners-js/fetch-partners.js"></script>
+  <script src="/onlineshop/aos/aos_js/aos.js"></script>
+    <script>
+  AOS.init();
+  </script>
+</body>
+</html>
